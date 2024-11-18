@@ -27,27 +27,45 @@ def getMatchings(img, name, shouldMatch):
         res_std = np.std(res)
 
         # Define o limiar como média + desvio padrão
-        threshold = res_mean + 2 * res_std
         min_val, max_val, min_loc, max_loc = cv.minMaxLoc(res)
 
         # If the method is TM_SQDIFF or TM_SQDIFF_NORMED, take minimum
         if method in [cv.TM_SQDIFF, cv.TM_SQDIFF_NORMED]:
-            top_left = min_loc
-        else:
-            top_left = max_loc
-        bottom_right = (top_left[0] + w, top_left[1] + h)
 
-        if max_val >= threshold:
-            cv.rectangle(img2,top_left, bottom_right, 255, 2)
-            if shouldMatch:
-                tp[i] += 1
+            top_left = min_loc
+            bottom_right = (top_left[0] + w, top_left[1] + h)
+
+            threshold = res_mean - 2 * res_std
+            if max_val <= threshold:
+                cv.rectangle(img2,top_left, bottom_right, 255, 2)
+                if shouldMatch:
+                    tp[i] += 1
+                else:
+                    fp[i] += 1
             else:
-                fp[i] += 1
+                if shouldMatch:
+                    fn[i] += 1
+                else:
+                    tn[i] += 1
         else:
-            if shouldMatch:
-                fn[i] += 1
+
+            top_left = max_loc
+            bottom_right = (top_left[0] + w, top_left[1] + h)
+
+            threshold = res_mean + 2 * res_std
+            if max_val >= threshold:
+                cv.rectangle(img2,top_left, bottom_right, 255, 2)
+                if shouldMatch:
+                    tp[i] += 1
+                else:
+                    fp[i] += 1
             else:
-                tn[i] += 1
+                if shouldMatch:
+                    fn[i] += 1
+                else:
+                    tn[i] += 1
+
+
 
         plt.subplot(121),plt.imshow(res,cmap = 'gray')
         plt.title('Matching Result'), plt.xticks([]), plt.yticks([])
