@@ -14,13 +14,14 @@ if not cap.isOpened():
 frame_count = 0
 
 while True:
- ret, frame = cap.read()
- if not ret:
-     break
+     ret, frame = cap.read()
+     if not ret:
+         break
 
- frame_name = os.path.join(output_dir, f"frame_{frame_count:04d}.jpg")
- cv.imwrite(frame_name, frame)
+     frame_name = os.path.join(output_dir, f"frame_{frame_count:04d}.jpg")
+     gray_frame = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+     cv.imwrite(frame_name, gray_frame)
 
- frame_count += 1
+     frame_count += 1
 
 cap.release()
