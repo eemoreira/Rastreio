@@ -1,7 +1,7 @@
 import cv2 as cv
 import os
 
-video_path = "videos/MonsterNoBackground.mp4"
+video_path = "videos/MonsterWithBackground.mp4"
 output_dir = "frames"
 os.makedirs(output_dir, exist_ok=True)
 

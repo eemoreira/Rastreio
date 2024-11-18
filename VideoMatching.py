@@ -7,7 +7,7 @@ methods = ['TM_CCOEFF_NORMED', 'TM_CCORR']
 template = cv.imread("MonsterTemplate.png", cv.IMREAD_GRAYSCALE)
 w, h = template.shape[::-1]
 frames_dir = "frames"
-output_dir = "VideoFrameMatchingNoBackground"
+output_dir = "VideoFrameMatchingWithBackground"
 
 def getMatchings(img, name):
     for meth in methods:
@@ -22,7 +22,7 @@ def getMatchings(img, name):
         matched_img = cv.cvtColor(img, cv.COLOR_GRAY2BGR)  # Convert to BGR for colored rectangle
         cv.rectangle(matched_img, top_left, bottom_right, (0, 255, 0), 2)
 
-        output_path = os.path.join(output_dir, f"{meth}/{name}_{meth}.jpg")
+        output_path = os.path.join(output_dir, f"{meth}/{name}_{meth}_WithBackground.jpg")
         cv.imwrite(output_path, matched_img)
 
 for filename in os.listdir(frames_dir):
