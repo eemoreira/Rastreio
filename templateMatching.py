@@ -41,16 +41,20 @@ def getMatchings(img, name, shouldMatch):
 
             threshold = res_mean - 2 * res_std
             if min_val <= threshold:
-                cv.rectangle(img2,top_left, bottom_right, 255, 2)
+                cv.rectangle(matched_img,top_left, bottom_right, 255, 2)
                 if shouldMatch:
                     tp[i] += 1
+                    ver = "tp"
                 else:
                     fp[i] += 1
+                    ver = "fp"
             else:
                 if shouldMatch:
                     fn[i] += 1
+                    ver = "fn"
                 else:
                     tn[i] += 1
+                    ver = "tn"
         else:
 
             top_left = max_loc
@@ -58,20 +62,22 @@ def getMatchings(img, name, shouldMatch):
 
             threshold = res_mean + 2 * res_std
             if max_val >= threshold:
-                cv.rectangle(img2,top_left, bottom_right, 255, 2)
+                cv.rectangle(matched_img,top_left, bottom_right, 255, 2)
                 if shouldMatch:
                     tp[i] += 1
+                    ver = "tp"
                 else:
                     fp[i] += 1
+                    ver = "fp"
             else:
                 if shouldMatch:
                     fn[i] += 1
+                    ver = "fn"
                 else:
                     tn[i] += 1
+                    ver = "tn"
 
-
-
-        output_path = os.path.join(output_dir, f"{name}_{meth}_WithBackground.jpg")
+        output_path = os.path.join(output_dir, f"{ver}_{name}_{meth}.jpg")
         cv.imwrite(output_path, matched_img)
 
 for filename in os.listdir("ursopardo"):

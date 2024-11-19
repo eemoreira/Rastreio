@@ -2,9 +2,11 @@ import cv2 as cv
 import os
 
 # best 2 mathods from previous part
-methods = ['TM_CCOEFF_NORMED', 'TM_CCORR']
+methods = ['TM_CCOEFF_NORMED', 'TM_CCORR_NORMED']
 
-template = cv.imread("MonsterTemplate.png", cv.IMREAD_GRAYSCALE)
+template_bg = "MonsterTemplateBG.jpg"
+template_nobg = "MonsterTemplateNOBG.png"
+template = cv.imread(template_bg, cv.IMREAD_GRAYSCALE)
 w, h = template.shape[::-1]
 frames_dir = "frames"
 output_dir = "VideoFrameMatchingWithBackground"
