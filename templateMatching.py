@@ -3,12 +3,15 @@ import numpy as np
 import os
 from matplotlib import pyplot as plt
 
+from VideoMatching import output_dir
+
 # All the 6 methods for comparison in a list
 methods = ['TM_CCOEFF', 'TM_CCOEFF_NORMED', 'TM_CCORR',
             'TM_CCORR_NORMED', 'TM_SQDIFF', 'TM_SQDIFF_NORMED']
 
 template = cv.imread("ursopardoTemplate.pgm", cv.IMREAD_GRAYSCALE)
 w, h = template.shape[::-1]
+output_dir = "ImgMatchings"
 
 tp = len(methods) * [0]
 fp = len(methods) * [0]
@@ -29,6 +32,7 @@ def getMatchings(img, name, shouldMatch):
         # Define o limiar como média + desvio padrão
         min_val, max_val, min_loc, max_loc = cv.minMaxLoc(res)
 
+        matched_img = cv.cvtColor(img, cv.COLOR_GRAY2BGR)  # Convert to BGR for colored rectangle
         # If the method is TM_SQDIFF or TM_SQDIFF_NORMED, take minimum
         if method in [cv.TM_SQDIFF, cv.TM_SQDIFF_NORMED]:
 
@@ -36,7 +40,7 @@ def getMatchings(img, name, shouldMatch):
             bottom_right = (top_left[0] + w, top_left[1] + h)
 
             threshold = res_mean - 2 * res_std
-            if max_val <= threshold:
+            if min_val <= threshold:
                 cv.rectangle(img2,top_left, bottom_right, 255, 2)
                 if shouldMatch:
                     tp[i] += 1
@@ -67,12 +71,8 @@ def getMatchings(img, name, shouldMatch):
 
 
 
-        plt.subplot(121),plt.imshow(res,cmap = 'gray')
-        plt.title('Matching Result'), plt.xticks([]), plt.yticks([])
-        plt.subplot(122),plt.imshow(img2,cmap = 'gray')
-        plt.title('Detected Point'), plt.xticks([]), plt.yticks([])
-        plt.suptitle(meth)
-        plt.savefig(f'ImgMatchings/{name}_{meth}.png')
+        output_path = os.path.join(output_dir, f"{name}_{meth}_WithBackground.jpg")
+        cv.imwrite(output_path, matched_img)
 
 for filename in os.listdir("ursopardo"):
     if filename.endswith(".pgm"):
