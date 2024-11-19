@@ -36,7 +36,7 @@ def getMatchings(img, name, shouldMatch):
             bottom_right = (top_left[0] + w, top_left[1] + h)
 
             threshold = res_mean - 2 * res_std
-            if max_val <= threshold:
+            if min_val <= threshold:
                 cv.rectangle(img2,top_left, bottom_right, 255, 2)
                 if shouldMatch:
                     tp[i] += 1
